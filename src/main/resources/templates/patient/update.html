@@ -19,42 +19,42 @@
       <div class="form-group">
         <label for="firstName" class="col-sm-2 control-label">First Name</label>
         <div class="col-sm-10">
-          <input type="text" th:field="*{firstName}" id="firstName" placeholder="FirstName" class="col-4">
+          <input type="text" th:field="*{firstName}" id="firstName" placeholder="FirstName" class="col-4" required="">
           <p class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
         </div>
       </div>
       <div class="form-group">
         <label for="lastName" class="col-sm-2 control-label">LastName</label>
         <div class="col-sm-10">
-          <input type="text" th:field="*{lastName}" id="lastName" placeholder="LastName" class="col-4">
+          <input type="text" th:field="*{lastName}" id="lastName" placeholder="LastName" class="col-4" required="">
           <p class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
         </div>
       </div>
       <div class="form-group">
         <label for="birthdate" class="col-sm-2 control-label">Date of Birth</label>
         <div class="col-sm-10">
-          <input type="date" th:field="*{birthdate}" id="birthdate" placeholder="Birthdate" class="col-4">
+          <input type="date" th:field="*{birthdate}" id="birthdate" placeholder="Birthdate" class="col-4" required="">
           <p class="text-danger" th:if="${#fields.hasErrors('birthdate')}" th:errors="*{birthdate}"></p>
         </div>
       </div>
       <div class="form-group">
         <label for="sex" class="col-sm-2 control-label">Sex</label>
         <div class="col-sm-10">
-          <input type="text" th:field="*{sex}" id="sex" placeholder="Sex" class="col-4">
+          <input type="text" th:field="*{sex}" id="sex" placeholder="Sex" class="col-4" required pattern="[MF]" title="Sex must be either 'M' or 'F'">
           <p class="text-danger" th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}"></p>
         </div>
       </div>
       <div class="form-group">
         <label for="address" class="col-sm-2 control-label">Address</label>
         <div class="col-sm-10">
-          <input type="text" th:field="*{address}" id="address" placeholder="Address" class="col-4">
+          <input type="text" th:field="*{address}" id="address" placeholder="Address" class="col-4" maxlength="255">
           <p class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
         </div>
       </div>
       <div class="form-group">
         <label for="phoneNumber" class="col-sm-2 control-label">PhoneNumber</label>
         <div class="col-sm-10">
-          <input type="text" th:field="*{phoneNumber}" id="phoneNumber" placeholder="Phone Number" class="col-4">
+          <input type="text" th:field="*{phoneNumber}" id="phoneNumber" placeholder="Phone Number" class="col-4" maxlength="15">
           <p class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
         </div>
       </div>
@@ -67,7 +67,31 @@
       </div>
     </form>
   </div>
-
+<!--&lt;!&ndash;&ndash;&gt;  <div th:if="${notes!=null and !notes.empty}">-->
+  <div th:if="${notes!=null and !notes.empty}">
+    <h2>Medical notes</h2>
+    <table class="table table-bordered">
+      <tr >
+        <th>Date</th>
+        <th>Notes</th>
+        <th>Modify</th>
+        <th>Delete</th>
+      </tr>
+      <tr th:each="note:${notes}" >
+        <th th:text="${note.getDate()}"></th>
+        <th th:text="${note.getAnnotation()}"></th>
+        <th class="btn btn-primary" th:attr="onclick='window.location.href=\'/note/'+ ${note.getId()} +'\''">Edit</th>
+        <th>
+          <form th:action="@{/note/deleteNote}" th:method="delete">
+            <input type="hidden" name="noteId" th:value="${note.getId()}" />
+            <input type="hidden" name="patId" th:value="${patient.getId()}" />
+            <input type="submit" value="Delete" class="btn btn-danger" />
+          </form>
+        </th>
+      </tr>
+    </table>
+  </div>
+  <a th:href="@{/note/{id}/addNote(id=${patient.getId()})}"> Add a note</a>
 </div>
 </body>
 </html>
