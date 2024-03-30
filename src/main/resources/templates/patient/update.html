@@ -67,6 +67,14 @@
       </div>
     </form>
   </div>
+  <div class="popup-overlay" id="popup">
+    <div class="popup-content">
+      <h2>Medical Analyse</h2>
+      <div class="col-sm-10" style="background-color:yellow;">
+        <th th:text="${assessment}"></th>
+      </div>
+    </div>
+  </div>
 <!--&lt;!&ndash;&ndash;&gt;  <div th:if="${notes!=null and !notes.empty}">-->
   <div th:if="${note!=null and !note.empty}">
     <h2>Medical notes</h2>
@@ -110,7 +118,8 @@
         </th>
       </tr>
     </table>-->
-</div>
+
+  </div>
   <a th:href="@{/note/{id}/addNote(id=${patient.getId()})}"> Add a note</a>
 </div>
 </body>

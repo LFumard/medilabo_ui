@@ -1,6 +1,7 @@
 package com.lfumard.medilabo_ui.controller;
 
 import com.lfumard.medilabo_ui.beans.PatientBean;
+import com.lfumard.medilabo_ui.service.AssessmentService;
 import com.lfumard.medilabo_ui.service.NoteService;
 import com.lfumard.medilabo_ui.service.PatientService;
 import org.apache.logging.log4j.LogManager;
@@ -20,12 +21,14 @@ public class PatientController {
     //@Autowired
     private final PatientService patientService;
     private final NoteService noteService;
+    private final AssessmentService assessmentService;
 
     private static final Logger logger = LogManager.getLogger("PatientController");
 
-    public PatientController(PatientService patientService, NoteService noteService) {
+    public PatientController(PatientService patientService, NoteService noteService, AssessmentService assessmentService) {
         this.patientService = patientService;
         this.noteService = noteService;
+        this.assessmentService = assessmentService;
     }
 
     @GetMapping("/list")
@@ -90,6 +93,7 @@ public class PatientController {
         logger.info("New request Get Mapping from UI : update patient : " + patientId);
         model.addAttribute("patient", patientService.findById(patientId));
         model.addAttribute("note", noteService.getNoteByPatientId(patientId));
+        model.addAttribute("assessment", assessmentService.getAssessment(patientId));
         return "patient/update";
     }
 
