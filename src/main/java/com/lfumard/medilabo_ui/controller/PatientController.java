@@ -1,7 +1,7 @@
 package com.lfumard.medilabo_ui.controller;
 
 import com.lfumard.medilabo_ui.beans.PatientBean;
-import com.lfumard.medilabo_ui.proxies.PatientProxies;
+import com.lfumard.medilabo_ui.service.NoteService;
 import com.lfumard.medilabo_ui.service.PatientService;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Controller;
@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.apache.logging.log4j.Logger;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
@@ -20,11 +19,13 @@ public class PatientController {
 
     //@Autowired
     private final PatientService patientService;
+    private final NoteService noteService;
 
     private static final Logger logger = LogManager.getLogger("PatientController");
 
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientService patientService, NoteService noteService) {
         this.patientService = patientService;
+        this.noteService = noteService;
     }
 
     @GetMapping("/list")
@@ -88,6 +89,7 @@ public class PatientController {
 
         logger.info("New request Get Mapping from UI : update patient : " + patientId);
         model.addAttribute("patient", patientService.findById(patientId));
+        model.addAttribute("note", noteService.getNoteByPatientId(patientId));
         return "patient/update";
     }
 
@@ -107,8 +109,9 @@ public class PatientController {
 
     @GetMapping(value = "/delete/{patientId}")
     public String deletePatientById(@PathVariable("patientId") Long patientId) {
-        patientService.deleteById(patientId);
         logger.info("New request Get Mapping from UI : delete patient : " + patientId);
+        // Suppression des notes associées au patient
+        patientService.deleteAllByPatientId(patientId);
         return "redirect:/patient/list";
     }
 }

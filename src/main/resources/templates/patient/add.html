@@ -65,7 +65,7 @@
       </div>
     </form>
   </div>
-  <div th:if="${notes!=null and !notes.empty}">
+  <div th:if="${note!=null and !note.empty}">
     <h2>Medical notes</h2>
     <table class="table table-bordered">
       <tr >
@@ -74,7 +74,7 @@
         <th>Modify</th>
         <th>Delete</th>
       </tr>
-      <tr th:each="note:${notes}" >
+      <tr th:each="note:${note}" >
         <th th:text="${note.getDate()}"></th>
         <th th:text="${note.getAnnotation()}"></th>
         <th class="btn btn-primary" th:attr="onclick='window.location.href=\'/note/'+ ${note.getId()} +'\''">Edit</th>

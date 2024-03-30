@@ -40,4 +40,14 @@ public class NoteBean {
     public void setPatientNote(String patientNote) {
         this.patientNote = patientNote;
     }
+
+    @Override
+    public String toString() {
+        return "NoteBean{" +
+                "id='" + id + '\'' +
+                ", patientId=" + patientId +
+                ", date=" + date +
+                ", patientNote='" + patientNote + '\'' +
+                '}';
+    }
 }

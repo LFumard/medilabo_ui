@@ -4,6 +4,8 @@ import com.lfumard.medilabo_ui.beans.NoteBean;
 import com.lfumard.medilabo_ui.proxies.NoteProxies;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NoteService {
     
@@ -18,6 +20,10 @@ public class NoteService {
         return noteProxy.getNoteById(id);
     }
 
+    public List<NoteBean> getAllNote (){
+
+        return noteProxy.getAllNote();
+    }
     public void addNote(NoteBean note) {
 
         noteProxy.addNote(note);
@@ -31,5 +37,10 @@ public class NoteService {
     public void updateNote(NoteBean note) {
 
         noteProxy.updateNote(note);
+    }
+
+    public List<NoteBean> getNoteByPatientId(Long patientId) {
+
+        return noteProxy.getNotesByPatId(patientId);
     }
 }

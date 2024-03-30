@@ -68,29 +68,49 @@
     </form>
   </div>
 <!--&lt;!&ndash;&ndash;&gt;  <div th:if="${notes!=null and !notes.empty}">-->
-  <div th:if="${notes!=null and !notes.empty}">
+  <div th:if="${note!=null and !note.empty}">
     <h2>Medical notes</h2>
     <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Date</th>
+        <th>Comment</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="notes : ${note}">
+        <td style="width: 10%" th:text="${notes.id}"></td>
+        <td th:date="${notes.date}"></td>
+        <td th:text="${notes.patientNote}"></td>
+        <td style="width: 15%" class="text-center">
+          <a th:href="@{/note/{id}(id=${notes.id})}">Edit</a>&nbsp;|&nbsp;
+          <a th:href="@{/note/delete/{id},{patId}(id=${notes.id}, patId=${notes.patientId})}">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+<!--    <table class="table table-bordered">
       <tr >
         <th>Date</th>
         <th>Notes</th>
         <th>Modify</th>
         <th>Delete</th>
       </tr>
-      <tr th:each="note:${notes}" >
-        <th th:text="${note.getDate()}"></th>
-        <th th:text="${note.getAnnotation()}"></th>
+      <tr th:each="notes:${note}" >
+        <th th:text="${notes.date}"></th>
+        <th th:text="${note.getPatientNote()}"></th>
         <th class="btn btn-primary" th:attr="onclick='window.location.href=\'/note/'+ ${note.getId()} +'\''">Edit</th>
         <th>
           <form th:action="@{/note/deleteNote}" th:method="delete">
             <input type="hidden" name="noteId" th:value="${note.getId()}" />
-            <input type="hidden" name="patId" th:value="${patient.getId()}" />
+            <input type="hidden" name="patientId" th:value="${patient.getId()}" />
             <input type="submit" value="Delete" class="btn btn-danger" />
           </form>
         </th>
       </tr>
-    </table>
-  </div>
+    </table>-->
+</div>
   <a th:href="@{/note/{id}/addNote(id=${patient.getId()})}"> Add a note</a>
 </div>
 </body>

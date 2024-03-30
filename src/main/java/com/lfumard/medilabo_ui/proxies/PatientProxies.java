@@ -11,7 +11,7 @@ import java.util.List;
 @FeignClient(name = "patient", url = "${medilabo_gateway.url}")
 public interface PatientProxies {
 
-    @GetMapping(value = "patient/list")
+    @GetMapping(value = "/patient/list")
     List<PatientBean> findAll();
 
     //@PostMapping(value = "/patient/add")
@@ -27,7 +27,7 @@ public interface PatientProxies {
 
 
 
-    @GetMapping("/patient/update/{patientId}")
+    @GetMapping("/patient/{patientId}")
     PatientBean getPatientById(@PathVariable("patientId") Long patientId);
     //PatientBean showUpdatePatientForm(Long patientId);
     //PatientBean findById(@PathVariable("patientId") Long patientId);
