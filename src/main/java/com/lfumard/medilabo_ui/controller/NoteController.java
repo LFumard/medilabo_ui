@@ -34,13 +34,13 @@ public class NoteController {
         return "note/updateNote";
     }
 
-    @GetMapping("/list")
+    /*@GetMapping("/list")
     public String getAllNote(Model model) {
         logger.info("New request Mapping  : getAllNote ");
         model.addAttribute("note", noteService.getAllNote());
         //return "note";
         return "patient/list";
-    }
+    }*/
 
     @PostMapping("/addNote")
     public String addNote(@ModelAttribute("note")  NoteBean note){
@@ -51,6 +51,8 @@ public class NoteController {
     }
     @GetMapping("/{id}/addNote")
     public String addNoteForm(@PathVariable(value = "id") Long patId, Model model){
+
+        if(patId == 0) return "redirect:/patient/list";
 
         logger.info("New request Mapping  : addNoteForm " + patId);
         NoteBean noteBean = new NoteBean();
@@ -72,8 +74,9 @@ public class NoteController {
         return "redirect:/patient/update/" + patientId.toString();
     }
     @PostMapping("/updateNote")
-    public String updateNoteById(@ModelAttribute  NoteBean note, Model model){
-        logger.info("New request PostMapping updateNoteById : " + note);
+    //public String updateNoteById(@ModelAttribute  NoteBean note, Model model){
+    public String updateNoteById(@ModelAttribute  NoteBean note){
+        logger.info("New request PostMapping updateNoteById : " + note.toString());
         noteService.updateNote(note);
         return "redirect:/patient/update/"+note.getPatientId();
     }

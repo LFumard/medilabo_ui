@@ -1,6 +1,8 @@
 package com.lfumard.medilabo_ui.proxies;
 
 //import org.springframework.cloud.openfeign.FeignClient;
+import feign.Headers;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -8,8 +10,13 @@ import com.lfumard.medilabo_ui.beans.PatientBean;
 
 import java.util.List;
 
+
 @FeignClient(name = "patient", url = "${medilabo_gateway.url}")
+//@Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTAiLCJpYXQiOjE3MTUwOTA1NzcsImV4cCI6MTcxNTE3Njk3N30.R9XqM5fyv1eZSs8Zzk4vO48i3mSKgJrvAzEbuKHHeUo")
 public interface PatientProxies {
+
+    /*@Value("${medilabo_token}")
+    private String token;*/
 
     @GetMapping(value = "/patient/list")
     List<PatientBean> findAll();

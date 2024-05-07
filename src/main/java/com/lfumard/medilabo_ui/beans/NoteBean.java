@@ -9,6 +9,15 @@ public class NoteBean {
     private LocalDateTime date;
     private String patientNote;
 
+    public NoteBean(String id, long patientId, String patientNote) {
+        this.id = id;
+        this.patientId = patientId;
+        this.date = date;
+        this.patientNote = patientNote;
+    }
+
+    public NoteBean() {}
+
     public String getId() {
         return id;
     }
