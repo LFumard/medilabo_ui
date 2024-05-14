@@ -1,10 +1,11 @@
 package com.lfumard.medilabo_ui.proxies;
 
 //import org.springframework.cloud.openfeign.FeignClient;
-import feign.Headers;
-import org.springframework.beans.factory.annotation.Value;
+import com.lfumard.medilabo_ui.beans.SignupRequestBean;
+import com.lfumard.medilabo_ui.security.AuthFeignInterceptor;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.*;
 import com.lfumard.medilabo_ui.beans.PatientBean;
 
@@ -19,13 +20,13 @@ public interface PatientProxies {
     private String token;*/
 
     @GetMapping(value = "/patient/list")
-    List<PatientBean> findAll();
+    List<PatientBean> findAll(@RequestHeader("Authorization") String token);
 
     //@PostMapping(value = "/patient/add")
     //List<PatientBean> addPatient(PatientBean patient);
 
     @PostMapping("/patient/validate")
-    List<PatientBean> addPatient(PatientBean patientBean);
+    List<PatientBean> addPatient(PatientBean patientBean, @RequestHeader("Authorization") String token);
     //List<PatientBean> addPatient(@Validated PatientBean patientBean);
     //List<PatientBean> validate(@Validated PatientBean patientBean);
 
@@ -35,7 +36,7 @@ public interface PatientProxies {
 
 
     @GetMapping("/patient/{patientId}")
-    PatientBean getPatientById(@PathVariable("patientId") Long patientId);
+    PatientBean getPatientById(@PathVariable("patientId") Long patientId, @RequestHeader("Authorization") String token);
     //PatientBean showUpdatePatientForm(Long patientId);
     //PatientBean findById(@PathVariable("patientId") Long patientId);
 
@@ -44,10 +45,13 @@ public interface PatientProxies {
 
     @PutMapping("/patient/update/{id}")
     //List<PatientBean> updatePatient(PatientBean patient, Long patientId);
-    List<PatientBean> updatePatient(@PathVariable("id") Long id, PatientBean patient);
+    List<PatientBean> updatePatient(@PathVariable("id") Long id, PatientBean patient, @RequestHeader("Authorization") String token);
 
     @DeleteMapping("/patient/delete/{patientId}")
-    void deletePatientById(@PathVariable(value = "patientId") Long patientId);
+    void deletePatientById(@PathVariable(value = "patientId") Long patientId, @RequestHeader("Authorization") String token);
+
+    @PostMapping("/api/auth/signin")
+    String signup(SignupRequestBean signupRequestBean);
 
     //@GetMapping("/update/{patientId}")
     //PatientBean findById(@PathVariable("patientId") Long patientId);
@@ -67,3 +71,4 @@ public interface PatientProxies {
     //@PostMapping("/patient/update/{patientId}")
     //void updatePatient(PatientBean patient, Long patientId);
 }
+

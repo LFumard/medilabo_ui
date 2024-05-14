@@ -12,7 +12,7 @@ public class AssessmentService {
         this.assessmentProxies = assessmentProxies;
     }
 
-    public String getAssessment(Long patientId) {
-        return assessmentProxies.getAssessment(patientId);
+    public String getAssessment(Long patientId, String medilaboCookie) {
+        return assessmentProxies.getAssessment(patientId, "Bearer "+medilaboCookie);
     }
 }

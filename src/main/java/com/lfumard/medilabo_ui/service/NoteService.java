@@ -15,32 +15,32 @@ public class NoteService {
         this.noteProxy = noteProxy;
     }
 
-    public NoteBean getNoteById(String id) {
+    public NoteBean getNoteById(String id, String medilaboCookie) {
 
-        return noteProxy.getNoteById(id);
+        return noteProxy.getNoteById(id, "Bearer "+medilaboCookie);
     }
 
-    public List<NoteBean> getAllNote (){
+/*    public List<NoteBean> getAllNote (){
 
         return noteProxy.getAllNote();
-    }
-    public void addNote(NoteBean note) {
+    }*/
+    public void addNote(NoteBean note, String medilaboCookie) {
 
-        noteProxy.addNote(note);
-    }
-
-    public void deleteNoteById(String noteId) {
-
-        noteProxy.deleteNoteById(noteId);
+        noteProxy.addNote(note, "Bearer "+medilaboCookie);
     }
 
-    public void updateNote(NoteBean note) {
+    public void deleteNoteById(String noteId, String medilaboCookie) {
 
-        noteProxy.updateNote(note);
+        noteProxy.deleteNoteById(noteId, "Bearer "+medilaboCookie);
     }
 
-    public List<NoteBean> getNoteByPatientId(Long patientId) {
+    public void updateNote(NoteBean note, String medilaboCookie) {
 
-        return noteProxy.getNotesByPatId(patientId);
+        noteProxy.updateNote(note, "Bearer "+medilaboCookie);
+    }
+
+    public List<NoteBean> getNoteByPatientId(Long patientId, String medilaboCookie) {
+
+        return noteProxy.getNotesByPatId(patientId, "Bearer "+medilaboCookie);
     }
 }

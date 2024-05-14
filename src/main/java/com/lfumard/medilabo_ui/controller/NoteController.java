@@ -24,10 +24,10 @@ public class NoteController {
         this.patientService = patientService;
     }
     @GetMapping("/{id}")
-    public String getNoteById(@PathVariable("id") String id, Model model) {
+    public String getNoteById(@PathVariable("id") String id, Model model, @CookieValue("medilabo") String medilaboCookie) {
         logger.info("New request Mapping  : getNoteById " + id);
-        NoteBean noteBean = noteService.getNoteById(id);
-        PatientBean patientBean = patientService.findById(noteBean.getPatientId());
+        NoteBean noteBean = noteService.getNoteById(id, medilaboCookie);
+        PatientBean patientBean = patientService.findById(noteBean.getPatientId(), medilaboCookie);
 
         model.addAttribute("note", noteBean);
         model.addAttribute("patientName", patientBean.getFirstName() + " " + patientBean.getLastName());
@@ -43,20 +43,20 @@ public class NoteController {
     }*/
 
     @PostMapping("/addNote")
-    public String addNote(@ModelAttribute("note")  NoteBean note){
+    public String addNote(@ModelAttribute("note")  NoteBean note, @CookieValue("medilabo") String medilaboCookie){
         logger.info("New request PostMapping  : addNote " + note.toString());
-        noteService.addNote(note);
+        noteService.addNote(note, medilaboCookie);
         return "redirect:/patient/update/"+note.getPatientId();
         //return "note/addNote";
     }
     @GetMapping("/{id}/addNote")
-    public String addNoteForm(@PathVariable(value = "id") Long patId, Model model){
+    public String addNoteForm(@PathVariable(value = "id") Long patId, Model model, @CookieValue("medilabo") String medilaboCookie){
 
         if(patId == 0) return "redirect:/patient/list";
 
         logger.info("New request Mapping  : addNoteForm " + patId);
         NoteBean noteBean = new NoteBean();
-        PatientBean patientBean = patientService.findById(patId);
+        PatientBean patientBean = patientService.findById(patId, medilaboCookie);
         model.addAttribute("patientName", patientBean.getFirstName() + " " + patientBean.getLastName());
         model.addAttribute("patientId", patientBean.getId());
 
@@ -66,18 +66,18 @@ public class NoteController {
     }
     //@GetMapping("/delete")
     @GetMapping("/delete/{id},{patId}")
-    public String deleteNoteById(@PathVariable("id") String noteId, @PathVariable("patId") Long patientId){
+    public String deleteNoteById(@PathVariable("id") String noteId, @PathVariable("patId") Long patientId, @CookieValue("medilabo") String medilaboCookie){
     //public String deleteNoteById(@RequestParam("id") String noteId, @RequestParam("patId") Long patientId){
         logger.info("New request DeleteMapping  : deleteNoteById " + noteId);
-        noteService.deleteNoteById(noteId);
+        noteService.deleteNoteById(noteId, medilaboCookie);
         //return "redirect:/patient/" + toString().valueOf(patientId.floatValue());
         return "redirect:/patient/update/" + patientId.toString();
     }
     @PostMapping("/updateNote")
     //public String updateNoteById(@ModelAttribute  NoteBean note, Model model){
-    public String updateNoteById(@ModelAttribute  NoteBean note){
+    public String updateNoteById(@ModelAttribute  NoteBean note, @CookieValue("medilabo") String medilaboCookie){
         logger.info("New request PostMapping updateNoteById : " + note.toString());
-        noteService.updateNote(note);
+        noteService.updateNote(note, medilaboCookie);
         return "redirect:/patient/update/"+note.getPatientId();
     }
 }

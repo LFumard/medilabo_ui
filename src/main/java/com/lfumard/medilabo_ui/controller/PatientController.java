@@ -32,9 +32,9 @@ public class PatientController {
     }
 
     @GetMapping("/list")
-    public String home(Model model) {
+    public String home(Model model, @CookieValue("medilabo") String medilaboCookie) {
         logger.info("New request Mapping from UI : show all Patients");
-        List<PatientBean> patientBeanList = patientService.findAll();
+        List<PatientBean> patientBeanList = patientService.findAll(medilaboCookie);
         model.addAttribute("patientList", patientBeanList);
         return "patient/list";
     }
@@ -57,7 +57,7 @@ public class PatientController {
 
     @PostMapping("/validate")
     //public RedirectView addValidationPatient(PatientBean patient, BindingResult result, Model model) {
-    public String addValidationPatient(PatientBean patient, BindingResult result, Model model) {
+    public String addValidationPatient(PatientBean patient, BindingResult result, Model model, @CookieValue("medilabo") String medilaboCookie) {
 
         if(result.hasErrors()) {
             logger.error("New request Post Mapping from IU : ERROR add new patient : " + patient);
@@ -68,7 +68,7 @@ public class PatientController {
         //model.addAttribute("patientList", patientService.findAll());
         //model.addAttribute("patientList", patientService.addPatient(patient));
         logger.info("New request Post Mapping from UI : Add new Patient : " + patient);
-        model.addAttribute("patientList", patientService.addPatient(patient));
+        model.addAttribute("patientList", patientService.addPatient(patient, medilaboCookie));
         //return new RedirectView("redirect:/patient/list");
         return "redirect:/patient/list";
         //return "/patient/list";
@@ -88,18 +88,17 @@ public class PatientController {
     }*/
 
    @GetMapping("/update/{patientId}")
-    public String showUpdatePatientForm(@PathVariable("patientId") Long patientId, Model model) {
+    public String showUpdatePatientForm(@PathVariable("patientId") Long patientId, Model model, @CookieValue("medilabo") String medilaboCookie) {
 
         logger.info("New request Get Mapping from UI : update patient : " + patientId);
-        model.addAttribute("patient", patientService.findById(patientId));
-        model.addAttribute("note", noteService.getNoteByPatientId(patientId));
-        model.addAttribute("assessment", assessmentService.getAssessment(patientId));
+        model.addAttribute("patient", patientService.findById(patientId, medilaboCookie));
+        model.addAttribute("note", noteService.getNoteByPatientId(patientId, medilaboCookie));
+        model.addAttribute("assessment", assessmentService.getAssessment(patientId, medilaboCookie));
         return "patient/update";
     }
 
     @PostMapping("/update/{id}")
-    public String updatePatient(@PathVariable("id") Long id, PatientBean patient,
-                                       BindingResult result, Model model) {
+    public String updatePatient(@PathVariable("id") Long id, PatientBean patient, BindingResult result, Model model, @CookieValue("medilabo") String medilaboCookie) {
 
         if (result.hasErrors()) {
             logger.error("New request Post Mapping from UI : ERROR update patient : " + patient);
@@ -107,15 +106,15 @@ public class PatientController {
         }
         logger.info("New request Post Mapping from UI : update patient : " + patient);
         //patientService.updatePatient(patient, patientId);
-        model.addAttribute("patientList", patientService.updatePatient(id, patient));
+        model.addAttribute("patientList", patientService.updatePatient(id, patient, medilaboCookie));
         return "redirect:/patient/list";
     }
 
     @GetMapping(value = "/delete/{patientId}")
-    public String deletePatientById(@PathVariable("patientId") Long patientId) {
+    public String deletePatientById(@PathVariable("patientId") Long patientId, @CookieValue("medilabo") String medilaboCookie) {
         logger.info("New request Get Mapping from UI : delete patient : " + patientId);
         // Suppression des notes associées au patient
-        patientService.deleteAllByPatientId(patientId);
+        patientService.deleteAllByPatientId(patientId, medilaboCookie);
         return "redirect:/patient/list";
     }
 }

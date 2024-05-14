@@ -18,32 +18,32 @@ public class PatientService {
         this.noteProxies = noteProxies;
     }
 
-    public List<PatientBean> findAll() {
+    public List<PatientBean> findAll(String medilaboCookie) {
 
-        return patientProxy.findAll();
+        return patientProxy.findAll("Bearer "+medilaboCookie);
     }
 
-    public List<PatientBean> updatePatient(Long id, PatientBean patient) {
+    public List<PatientBean> updatePatient(Long id, PatientBean patient, String medilaboCookie) {
 
-        return patientProxy.updatePatient(id, patient);
+        return patientProxy.updatePatient(id, patient, "Bearer "+medilaboCookie);
     }
 
-    public void deleteById(Long patientId) {
+/*    public void deleteById(Long patientId, String medilaboCookie) {
 
-        patientProxy.deletePatientById(patientId);
+        patientProxy.deletePatientById(patientId, "Bearer "+medilaboCookie);
+    }*/
+
+    public PatientBean findById(Long patientId, String medilaboCookie) {
+        return patientProxy.getPatientById(patientId, "Bearer "+medilaboCookie);
     }
 
-    public PatientBean findById(Long patientId) {
-        return patientProxy.getPatientById(patientId);
+    public List<PatientBean> addPatient(PatientBean patient, String medilaboCookie) {
+        return patientProxy.addPatient(patient, "Bearer "+medilaboCookie);
     }
 
-    public List<PatientBean> addPatient(PatientBean patient) {
-        return patientProxy.addPatient(patient);
-    }
+    public void deleteAllByPatientId(Long patientId, String medilaboCookie) {
 
-    public void deleteAllByPatientId(Long patientId) {
-
-        noteProxies.deleteNoteByPatientId(patientId);
-        patientProxy.deletePatientById(patientId);
+        noteProxies.deleteNoteByPatientId(patientId, "Bearer "+medilaboCookie);
+        patientProxy.deletePatientById(patientId, "Bearer "+medilaboCookie);
     }
 }

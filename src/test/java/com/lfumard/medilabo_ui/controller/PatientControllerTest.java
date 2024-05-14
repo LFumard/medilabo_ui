@@ -10,19 +10,11 @@ import com.lfumard.medilabo_ui.service.AssessmentService;
 import com.lfumard.medilabo_ui.service.NoteService;
 import com.lfumard.medilabo_ui.service.PatientService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.junit.runner.RunWith;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
@@ -78,7 +70,7 @@ public class PatientControllerTest {
         patientList = new ArrayList<>();
         patientList.add(new PatientBean(1L, "patientFirstName1", "patientLastName1", LocalDate.of(1971,1,1), "M", "patientAddress1", "1111111111"));
         patientList.add(new PatientBean(2L, "patientFirstName2", "patientLastName2", LocalDate.of(1972,2,2), "F", "patientAddress2", "2222222222"));
-        when(patientProxies.findAll()).thenReturn(patientList);
+        when(patientProxies.findAll("")).thenReturn(patientList);
 
         this.mockMvc.perform(get("/patient/list"))
                 .andExpect(status().isOk())
@@ -119,7 +111,7 @@ public class PatientControllerTest {
         PatientBean patientToAdd = new PatientBean(1L, "patientFirstName1", "patientLastName1", LocalDate.of(1971,1,1), "1111111111", "M", "patientAddress1");
         patientList = new ArrayList<>();
         patientList.add(patientToAdd);
-        when(patientProxies.addPatient(patientToAdd)).thenReturn(patientList);
+        when(patientProxies.addPatient(patientToAdd, "")).thenReturn(patientList);
 
         String strContent = objectMapper.writeValueAsString(patientToAdd);
         this.mockMvc.perform(post("/patient/validate")
@@ -133,15 +125,15 @@ public class PatientControllerTest {
     public void testShowUpdatePatientForm() throws Exception {
 
         PatientBean patient = new PatientBean(1L, "patientFirstName1", "patientLastName1", LocalDate.of(1971,1,1), "1111111111", "M", "patientAddress1");
-        when(patientProxies.getPatientById(1L)).thenReturn(patient);
+        when(patientProxies.getPatientById(1L, "")).thenReturn(patient);
 
         List<NoteBean> noteListAll = new ArrayList<>();
         noteListAll.add(new NoteBean("1", 1L, "Note1 Patient 1"));
         noteListAll.add(new NoteBean("2", 1L, "Note2 Patient 1"));
-        given(noteProxies.getNotesByPatId(1L)).willReturn(noteListAll);
+        given(noteProxies.getNotesByPatId(1L, "")).willReturn(noteListAll);
 
         String assessment = "Assessment Test";
-        given(assessmentProxies.getAssessment(1L)).willReturn(assessment);
+        given(assessmentProxies.getAssessment(1L, "")).willReturn(assessment);
 
         this.mockMvc.perform(get("/patient/update/1"))
                 .andExpect(status().isOk())
@@ -173,7 +165,7 @@ public class PatientControllerTest {
         PatientBean patientToUpdate = new PatientBean(1L, "patientFirstName1", "patientLastName1", LocalDate.of(1971,1,1), "1111111111", "M", "patientAddress1");
         patientList = new ArrayList<>();
         patientList.add(patientToUpdate);
-        when(patientProxies.updatePatient(1L, patientToUpdate)).thenReturn(patientList);
+        when(patientProxies.updatePatient(1L, patientToUpdate, "")).thenReturn(patientList);
 
         String strContent = objectMapper.writeValueAsString(patientToUpdate);
         this.mockMvc.perform(post("/patient/update/1")
@@ -194,7 +186,7 @@ public class PatientControllerTest {
                 .andExpect(status().is(302))
                 .andExpect(view().name("redirect:/patient/list"));
 
-        verify(patientProxies, times(1)).deletePatientById(anyLong());
-        verify(noteProxies, times(1)).deleteNoteByPatientId(anyLong());
+        verify(patientProxies, times(1)).deletePatientById(anyLong(), "");
+        verify(noteProxies, times(1)).deleteNoteByPatientId(anyLong(), "");
     }
 }

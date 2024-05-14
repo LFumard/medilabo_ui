@@ -9,22 +9,22 @@ import java.util.List;
 @FeignClient(name = "note", url = "${medilabo_gateway.url}")
 public interface NoteProxies {
     @GetMapping(value = "/service_note/{id}")
-    NoteBean getNoteById(@PathVariable String id);
+    NoteBean getNoteById(@PathVariable String id, @RequestHeader("Authorization") String token);
 
     @PostMapping(value = "/service_note/addNote")
-    void addNote(NoteBean note);
+    void addNote(NoteBean note, @RequestHeader("Authorization") String token);
 
     @DeleteMapping(value = "/service_note/delete/{id}")
-    void deleteNoteById(@PathVariable String id);
+    void deleteNoteById(@PathVariable String id, @RequestHeader("Authorization") String token);
 
     @DeleteMapping(value = "/service_note/deleteNoteByPatientId/{patId}")
-    void deleteNoteByPatientId(@PathVariable Long patId);
+    void deleteNoteByPatientId(@PathVariable Long patId, @RequestHeader("Authorization") String token);
     @PutMapping(value = "/service_note/update")
-    void updateNote(NoteBean note);
+    void updateNote(NoteBean note, @RequestHeader("Authorization") String token);
 
     @GetMapping(value = "/service_note/list/{patId}")
-    List<NoteBean> getNotesByPatId(@PathVariable Long patId);
+    List<NoteBean> getNotesByPatId(@PathVariable Long patId, @RequestHeader("Authorization") String token);
 
-    @GetMapping(value = "/service_note/list")
-    List<NoteBean> getAllNote();
+/*    @GetMapping(value = "/service_note/list")
+    List<NoteBean> getAllNote();*/
 }
