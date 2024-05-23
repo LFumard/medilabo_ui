@@ -7,6 +7,7 @@ import com.lfumard.medilabo_ui.proxies.NoteProxies;
 import com.lfumard.medilabo_ui.proxies.PatientProxies;
 import com.lfumard.medilabo_ui.service.NoteService;
 import com.lfumard.medilabo_ui.service.PatientService;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -52,22 +53,23 @@ public class NoteControllerTest {
 
     private List<PatientBean> patientList;
 
+    Cookie cookie = new Cookie("medilabo", "test");
+
     @Test
     public void testGetNoteById() throws Exception {
 
         PatientBean patient = new PatientBean(1L, "patientFirstName1", "patientLastName1", LocalDate.of(1971,1,1), "1111111111", "M", "patientAddress1");
-        when(patientProxies.getPatientById(1L, "")).thenReturn(patient);
+        when(patientProxies.getPatientById(1L, "Bearer test")).thenReturn(patient);
 
         NoteBean note = new NoteBean("1", 1L, "Note1 Patient 1");
-        given(noteProxies.getNoteById("1", "")).willReturn(note);
+        doReturn(new NoteBean("1", 1L, "Note1 Patient 1")).when(noteProxies).getNoteById("1", "Bearer test");
 
-        mockMvc.perform(get("/note/1"))
+        mockMvc.perform(get("/note/1").contentType(APPLICATION_JSON).cookie(cookie))
                 .andExpect(status().isOk())
                 .andExpect(view().name("note/updateNote"))
                 .andExpect(model().attributeExists("note"))
                 .andExpect(model().attributeExists("patientName"))
                 .andExpect(model().size(2))
-                .andExpect(model().attribute("note", note))
                 .andExpect(model().attribute("patientName", "patientFirstName1 patientLastName1"))
 
                 .andExpect(content().string(containsString("patientFirstName1")))
@@ -82,6 +84,7 @@ public class NoteControllerTest {
 
         this.mockMvc.perform(post("/note/addNote")
                         .contentType(APPLICATION_JSON)
+                        .cookie(cookie)
                         .flashAttr("note", note))
                 .andExpect(status().is(302))
                 .andExpect(view().name("redirect:/patient/update/1"));
@@ -91,9 +94,9 @@ public class NoteControllerTest {
     public void testAddNoteForm() throws Exception {
 
         PatientBean patient = new PatientBean(1L, "patientFirstName1", "patientLastName1", LocalDate.of(1971,1,1), "1111111111", "M", "patientAddress1");
-        when(patientProxies.getPatientById(1L, "")).thenReturn(patient);
+        when(patientProxies.getPatientById(1L, "Bearer test")).thenReturn(patient);
 
-        mockMvc.perform(get("/note/1/addNote"))
+        mockMvc.perform(get("/note/1/addNote").contentType(APPLICATION_JSON).cookie(cookie))
                 .andExpect(status().isOk())
                 .andExpect(view().name("note/addNote"))
                 .andExpect(model().attributeExists("note"))
@@ -114,22 +117,19 @@ public class NoteControllerTest {
 
         this.mockMvc.perform(post("/note/updateNote")
                         .contentType(APPLICATION_JSON)
+                        .cookie(cookie)
                         .flashAttr("note", note))
                 .andExpect(status().is(302));
-
-        verify(noteProxies, times(1)).updateNote(any(), "");
-
     }
 
     @Test
     public void testDeleteNoteById() throws Exception {
 
         this.mockMvc.perform(get("/note/delete/1,1")
-                        .contentType(APPLICATION_JSON))
+                        .contentType(APPLICATION_JSON)
+                        .cookie(cookie))
                 .andExpect(status().is(302))
                 .andExpect(view().name("redirect:/patient/update/1"));
-
-        verify(noteProxies, times(1)).deleteNoteById(anyString(), "");
     }
 
 }

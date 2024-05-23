@@ -12,7 +12,7 @@ public class NoteBean {
     public NoteBean(String id, long patientId, String patientNote) {
         this.id = id;
         this.patientId = patientId;
-        this.date = date;
+        //this.date = date;
         this.patientNote = patientNote;
     }
 

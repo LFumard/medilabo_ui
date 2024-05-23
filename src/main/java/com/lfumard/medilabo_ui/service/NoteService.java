@@ -3,7 +3,6 @@ package com.lfumard.medilabo_ui.service;
 import com.lfumard.medilabo_ui.beans.NoteBean;
 import com.lfumard.medilabo_ui.proxies.NoteProxies;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -20,10 +19,6 @@ public class NoteService {
         return noteProxy.getNoteById(id, "Bearer "+medilaboCookie);
     }
 
-/*    public List<NoteBean> getAllNote (){
-
-        return noteProxy.getAllNote();
-    }*/
     public void addNote(NoteBean note, String medilaboCookie) {
 
         noteProxy.addNote(note, "Bearer "+medilaboCookie);

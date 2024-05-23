@@ -25,6 +25,4 @@ public interface NoteProxies {
     @GetMapping(value = "/service_note/list/{patId}")
     List<NoteBean> getNotesByPatId(@PathVariable Long patId, @RequestHeader("Authorization") String token);
 
-/*    @GetMapping(value = "/service_note/list")
-    List<NoteBean> getAllNote();*/
 }

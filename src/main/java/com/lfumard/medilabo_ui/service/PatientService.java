@@ -28,10 +28,6 @@ public class PatientService {
         return patientProxy.updatePatient(id, patient, "Bearer "+medilaboCookie);
     }
 
-/*    public void deleteById(Long patientId, String medilaboCookie) {
-
-        patientProxy.deletePatientById(patientId, "Bearer "+medilaboCookie);
-    }*/
 
     public PatientBean findById(Long patientId, String medilaboCookie) {
         return patientProxy.getPatientById(patientId, "Bearer "+medilaboCookie);

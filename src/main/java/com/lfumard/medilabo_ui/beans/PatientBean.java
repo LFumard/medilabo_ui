@@ -25,7 +25,6 @@ public class PatientBean {
     }
 
     public PatientBean() {
-        //this.sex = "";
     }
 
     public long getId() {
@@ -82,5 +81,18 @@ public class PatientBean {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "PatientBean{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthdate=" + birthdate +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", sex='" + sex + '\'' +
+                ", address='" + address + '\'' +
+                '}';
     }
 }
